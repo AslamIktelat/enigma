@@ -1,88 +1,25 @@
-# Enigma 🤖
+# Enigma AI 🤖
+### *Autonomous Governance & Intelligence Engine*
 
-An intelligent Telegram bot for group and channel moderation that detects spam, analyzes toxicity, enforces community guidelines, and provides intelligent chat summarization.
+**Enigma** is a high-performance orchestration service built on **Spring AI** and **Java 21**. It is designed to manage community health through autonomous moderation and real-time tracking of user reputation.
 
-## 🎯 Project Overview
-
-Enigma is a sophisticated Telegram bot built with Spring Boot that serves as an automated moderator and community assistant. It leverages AI-powered analysis (powered by my own custom CoreAI module) to maintain healthy group/channel environments by detecting harmful content, warning violators, and helping users stay informed through intelligent message summarization.
-
-### Core Responsibilities
-- **Spam Detection**: Identify and flag repetitive or unsolicited messages
-- **Toxicity Analysis**: Analyze message content for harmful, offensive, or inappropriate language
-- **User Warnings**: Issue warnings to users who violate community guidelines
-- **Moderation Actions**: Automatically mute or ban users based on violation severity and frequency
-- **Chat Summarization**: Generate concise summaries of ongoing conversations for users who need context
+## 🚀 Phase 1: Core Agentic Engine (Current)
+- **Agentic Moderation**: Leverages **Spring AI Function Calling** to allow the LLM to autonomously trigger administrative actions (mute, ban, warn) via the Telegram API.
+- **Toxicity Scoring**: Implements a nuanced $0-100$ scoring system to categorize and respond to violations based on severity.
+- **Reputation (Karma) System**: A persistence-backed engine that tracks user behavior and applies rewards or penalties based on AI-derived sentiment.
+- **Reactive Architecture**: Built with an asynchronous processing pipeline to handle high-traffic group environments without latency.
 
 ## 🛠 Tech Stack
+* **Runtime**: Java 21 (utilizing Virtual Threads for I/O efficiency)
+* **Framework**: Spring Boot 3.4+
+* **AI Orchestration**: **Spring AI** (OpenAI integration)
+* **Persistence**: PostgreSQL (RAG-ready schema)
+* **Messaging**: Telegram Bot SDK
 
-- **Framework**: Spring Boot 4.0.2
-- **Language**: Java 17
-- **Build Tool**: Maven
-- **AI Engine**: Custom CoreAI module (v0.0.1-SNAPSHOT)
-- **Messaging Platform**: Telegram Bot API (v6.0.1)
-- **Database**: MySQL with Spring Data JPA
-- **Networking**: Project Reactor & Netty for async operations
-- **Utilities**: Lombok for cleaner code, SLF4J for logging
+## 🗺 Roadmap (Future Phases)
+- [ ] **Phase 2: Hybrid Memory (RAG)**: Integration of **PGVector** to enable semantic search and Q&A over historical chat data.
+- [ ] **Phase 3: Conversational Synthesis**: Automatic generation of "While you were away" summaries using retrieved vector context.
+- [ ] **Phase 4: Multi-Modal Support**: Voice-to-task conversion and image-based spam detection.
 
-## ✨ Features
-
-### Core Moderation Features
-- 🛡️ **Real-time Spam Detection** - Identifies repetitive messages and pattern-based spam
-- 📢 **Toxicity Analysis** - Analyzes message sentiment and flags offensive content
-- ⚠️ **Smart Warnings** - Graduated warning system before taking action
-- 🚫 **Automatic Moderation** - Temporary or permanent user restrictions based on violations
-- 📊 **User Violation Tracking** - Maintains history of violations per user
-
-### Intelligent Assistance
-- 📝 **Chat Summarization** - Generate summaries of group discussions on demand
-- 🔍 **Context Awareness** - Understand conversation flow and context
-- 💬 **Natural Interaction** - Friendly, conversational bot responses
-
-### Admin Features
-- ⚙️ **Configurable Thresholds** - Customize spam and toxicity detection sensitivity
-- 🎛️ **Custom Rules** - Define group-specific moderation rules
-- 📈 **Analytics & Reporting** - View moderation statistics and user reports
-- 🔐 **Role-based Control** - Admin-only commands and configurations
-
-
-## 📝 Database Schema Overview
-
-The bot maintains several key tables:
-
-- **users** - Telegram user information
-- **violations** - User violation records (spam, toxicity incidents)
-- **warnings** - Warning history per user
-- **group_settings** - Per-group moderation configurations
-- **message_cache** - Recent messages for summarization context
-- **moderation_actions** - History of mutes and bans
-
-
-
-## 🤝 Contributing
-
-Contributions are welcome! Please follow these steps:
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Make your changes with clear commit messages
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request with description of changes
-
-
-
-## 👤 Author
-
-**AslamIktelat**
-- GitHub: [@AslamIktelat](https://github.com/AslamIktelat)
-
-## 📞 Support & Feedback
-
-For issues, feature requests, or suggestions:
-- Open an issue on [GitHub Issues](https://github.com/AslamIktelat/enigma/issues)
-- Include relevant logs and configuration details
-- Describe the expected vs. actual behavior
-
-
----
-
-> **Note**: This is an active development project. Features and APIs may change. Please report bugs and suggest improvements!
+## 🏗 System Design
+The system is designed with a **Modular AI Gateway**. Incoming messages are processed by a moderation agent, which decides whether to invoke local tools (SQL updates) or external tools (Telegram API).
