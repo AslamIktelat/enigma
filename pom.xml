@@ -53,7 +53,7 @@
         <dependency>
             <groupId>com.core.ai</groupId>
             <artifactId>CoreAI</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>v1-Duel-LLM</version>
         </dependency>
 
         <dependency>

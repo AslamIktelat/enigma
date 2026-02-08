@@ -2,11 +2,12 @@ package com.ai.enigma.moderator;
 
 
 import com.ai.enigma.agent.ModerateResponse;
-import com.ai.enigma.agent.tools.BanUser;
-import com.ai.enigma.agent.tools.IncreaseWaringCounter;
-import com.ai.enigma.agent.tools.WarnUser;
+import com.ai.enigma.agent.tools.EnigmaMCPTool;
 import org.springframework.scheduling.annotation.Async;
 import org.telegram.telegrambots.meta.api.objects.Message;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class Moderator extends StepsAbstract{
@@ -21,26 +22,32 @@ public class Moderator extends StepsAbstract{
 
 
         int score= moderateResponse.getScore();
-
+        EnigmaMCPTool tool=null;
+        List<EnigmaMCPTool> tools= new ArrayList<>();
         if(61 <= score && score <= 75)
         {
             //Warn the user
-            WarnUser tool= (WarnUser) toolManager.getToolByBean("Warn_User");
-            tool.excute(message.getChatId(), message.getFrom().getId(),"NOT GOOD 75");
+            tools.add ((EnigmaMCPTool) toolManager.getToolByBean("Warn_User"));
 
         }
         if (71 <= score && score <= 90)
         {
             // ban for 1 hour
-           IncreaseWaringCounter tool= (IncreaseWaringCounter) toolManager.getToolByBean("IncreaseWaringCounter");
-           tool.IncreaseWaringCounter(message.getChatId(), message.getFrom().getId());
+            tools.add ((EnigmaMCPTool) toolManager.getToolByBean("IncreaseWaringCounter"));
+
         }
         if (91 <= score && score <= 100)
         {
-            WarnUser tool= (WarnUser) toolManager.getToolByBean("Warn_User");
-            tool.excute(message.getChatId(), message.getFrom().getId(),"You will be baned for 5 minutes");
-            BanUser banUser= (BanUser) toolManager.getToolByBean("Ban_User");
-            banUser.ban(message.getChatId(), message.getFrom().getId());
+            tools.add ((EnigmaMCPTool) toolManager.getToolByBean("Warn_User"));
+            tools.add ((EnigmaMCPTool) toolManager.getToolByBean("Ban_User"));
+
+        }
+        if(!tools.isEmpty())
+        {
+            for(EnigmaMCPTool t:tools)
+            {
+                t.excute(message);
+            }
         }
 
     }

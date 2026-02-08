@@ -74,9 +74,9 @@ public class BotService extends TelegramLongPollingBot {
         this.sendToUser(message);
     }
 
-    public void banUser(String chatId, Long userIdToBan) {
+    public void banUser(Long chatId, Long userIdToBan) {
         BanChatMember banChatMember = new BanChatMember();
-        banChatMember.setChatId(chatId);
+        banChatMember.setChatId(String.valueOf(chatId));
         banChatMember.setUserId(userIdToBan);
         // Optional: specify a untilDate (Unix timestamp) for a temporary ban.
         // If not set, the ban is permanent.

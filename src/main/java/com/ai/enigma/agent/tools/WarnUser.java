@@ -1,22 +1,22 @@
 package com.ai.enigma.agent.tools;
 
-import com.ai.enigma.services.DistributionServices;
-import com.core.ai.CoreAI.tools.MCPTool;
-import org.springframework.ai.tool.annotation.Tool;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.telegram.telegrambots.meta.api.objects.Message;
 
 @Component("Warn_User")
-public class WarnUser implements MCPTool {
+public class WarnUser extends EnigmaMCPTool {
 
-    @Autowired
-    DistributionServices distributionServices;
 
-    @Tool(name = "Warn_User",description = "Warn User by sending him a message")
-    public void excute (Long chatId,Long userId, String warningMessage)
-    {
-        String message="This is a warning message for user ID :: "+userId+"  "+warningMessage;
-        distributionServices.distribute(chatId,message);
+//    @Tool(name = "Warn_User",description = "Warn User by sending him a message")
+//    public void excute (Long chatId,Long userId, String warningMessage)
+//    {
+//        String message="This is a warning message for user ID :: "+userId+"  "+warningMessage;
+//        distributionServices.distribute(chatId,message);
+//
+//    }
 
+    @Override
+    public void excute(Message message) {
+        distributionServices.distribute(message.getChatId(),"This is a warning message for user ID :: "+message.getFrom().getId()+"  "+"Please follow the group rules to avoid further actions.");
     }
 }

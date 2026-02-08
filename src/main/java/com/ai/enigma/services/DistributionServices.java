@@ -13,7 +13,7 @@ public class DistributionServices {
         botService.sendToUser(chatId, text);
         }
 
-    public void banUser(String chatId, Long userIdToBan)
+    public void banUser(Long chatId, Long userIdToBan)
     {
         botService.banUser(chatId,userIdToBan);
     }
