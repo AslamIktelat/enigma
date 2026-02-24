@@ -84,15 +84,15 @@ public class ProcessUpdate {
             repoService.saveUserInfo(user);
         } else {
             boolean updated = false;
-            if (!user.getFirst_name().equals(from.getFirstName())) {
+            if (checkIfInfoChanged(user.getFirst_name(),from.getFirstName())) {
                 user.setFirst_name(from.getFirstName());
                 updated = true;
             }
-            if (!user.getLast_name().equals(from.getLastName())) {
+            if (checkIfInfoChanged(user.getFirst_name(),from.getFirstName())) {
                 user.setLast_name(from.getLastName());
                 updated = true;
             }
-            if (!user.getUsername().equals(from.getUserName())) {
+            if (checkIfInfoChanged(user.getUsername(), from.getUserName())) {
                 user.setUsername(from.getUserName());
                 updated = true;
             }
@@ -101,6 +101,16 @@ public class ProcessUpdate {
             }
         }
 
+    }
+    private boolean checkIfInfoChanged(String dbInfo,String teleInfo)
+    {
+        if (dbInfo == null && teleInfo == null) {
+            return false; // Both are null, considered unchanged
+        }
+        if (dbInfo == null || teleInfo == null) {
+            return true; // One is null and the other is not, considered changed
+        }
+        return !dbInfo.equals(teleInfo); // Compare non-null values
     }
 
     private void handleTextMsg(Message message)

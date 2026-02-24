@@ -11,6 +11,8 @@ import com.ai.enigma.repository.MessagesRepo;
 import com.ai.enigma.repository.UserInfoRepo;
 import com.ai.enigma.repository.UserStatsRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.ChatMemberUpdated;
@@ -29,12 +31,13 @@ public class RepoService {
     @Autowired
     ChatsRepo chatsRepo;
 
-
+    @Cacheable("userInfoCache")
     public UserInfoEntity getUserInfoByUserId(Long userId)
     {
         return userInfoRepo.getUserInfoEntityByUser_id(userId);
     }
     @Async
+    @CachePut(value = "userInfoCache", key = "#userInfo.user_id")
     public void saveUserInfo(UserInfoEntity userInfo)
     {
         userInfoRepo.save(userInfo);
