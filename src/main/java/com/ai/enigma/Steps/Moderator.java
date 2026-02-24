@@ -1,4 +1,4 @@
-package com.ai.enigma.moderator;
+package com.ai.enigma.Steps;
 
 
 import com.ai.enigma.agent.ModerateResponse;
@@ -14,7 +14,7 @@ public class Moderator extends StepsAbstract{
 
     @Override
     @Async
-    public void excute(Message message)
+    public void execute(Message message)
     {
         ModerateResponse moderateResponse = enigmaAgent.moderate(message.getText());
 
@@ -24,6 +24,8 @@ public class Moderator extends StepsAbstract{
         int score= moderateResponse.getScore();
         EnigmaMCPTool tool=null;
         List<EnigmaMCPTool> tools= new ArrayList<>();
+
+         /* *  TODO :: LLM should trigger the tools * */
         if(61 <= score && score <= 75)
         {
             //Warn the user

@@ -1,6 +1,6 @@
 package com.ai.enigma.config;
 
-import com.ai.enigma.moderator.Moderator;
+import com.ai.enigma.Steps.Moderator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

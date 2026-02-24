@@ -2,14 +2,17 @@ package com.ai.enigma.services;
 
 
 import com.ai.enigma.commandHandler.HandlerAbstract;
+import com.ai.enigma.entities.UserInfoEntity;
 import com.ai.enigma.enums.ContentType;
-import com.ai.enigma.moderator.StepsAbstract;
+import com.ai.enigma.Steps.StepsAbstract;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.ChatMemberUpdated;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.User;
 
 @Service
 public class ProcessUpdate {
@@ -35,6 +38,7 @@ public class ProcessUpdate {
         {
             Message message=update.getMessage();
             Long chatId=message.getChatId();
+            saveUserifNotExist(message.getFrom());
 
                 if( null !=message.getLeftChatMember()) {
                     if (botId.equals(message.getLeftChatMember().getId())) {
@@ -63,6 +67,42 @@ public class ProcessUpdate {
         }
     }
 
+    @Async
+    /* TODO :: should be moved to steps */
+    private void saveUserifNotExist(User from) {
+        //check in cache if exist
+        //if its changed update in DB and cache
+        //if not exist save in DB and cache
+        UserInfoEntity user= repoService.getUserInfoByUserId(from.getId());
+        if (user == null) {
+            user = new UserInfoEntity();
+
+            user.setUser_id(from.getId());
+            user.setFirst_name(from.getFirstName());
+            user.setLast_name(from.getLastName());
+            user.setUsername(from.getUserName());
+            repoService.saveUserInfo(user);
+        } else {
+            boolean updated = false;
+            if (!user.getFirst_name().equals(from.getFirstName())) {
+                user.setFirst_name(from.getFirstName());
+                updated = true;
+            }
+            if (!user.getLast_name().equals(from.getLastName())) {
+                user.setLast_name(from.getLastName());
+                updated = true;
+            }
+            if (!user.getUsername().equals(from.getUserName())) {
+                user.setUsername(from.getUserName());
+                updated = true;
+            }
+            if (updated) {
+                repoService.saveUserInfo(user);
+            }
+        }
+
+    }
+
     private void handleTextMsg(Message message)
     {
         if(message.getChat().getType().equals("supergroup")) // or chanel
@@ -70,7 +110,7 @@ public class ProcessUpdate {
             repoService.saveMsg(message, ContentType.TEXT);
             // call the agent to check the msg
             StepsAbstract moderator=context.getBean("Moderator", StepsAbstract.class);
-            moderator.excute(message);
+            moderator.execute(message);
         }
     }
     private void handleMemberUpdate(ChatMemberUpdated chatMemberUpdated)

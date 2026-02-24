@@ -1,4 +1,4 @@
-package com.ai.enigma.moderator;
+package com.ai.enigma.Steps;
 
 import com.ai.enigma.agent.EnigmaAgentService;
 import com.ai.enigma.services.RepoService;
@@ -15,5 +15,5 @@ public abstract class StepsAbstract {
     @Autowired
     ToolManager toolManager;
     @Async
-    public abstract void excute(Message message);
+    public abstract void execute(Message message);
 }

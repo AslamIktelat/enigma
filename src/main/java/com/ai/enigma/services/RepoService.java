@@ -2,11 +2,13 @@ package com.ai.enigma.services;
 
 import com.ai.enigma.entities.ChatEntity;
 import com.ai.enigma.entities.MessageEntity;
+import com.ai.enigma.entities.UserInfoEntity;
 import com.ai.enigma.entities.UserStatsEntity;
 import com.ai.enigma.enums.ContentType;
 import com.ai.enigma.mapper.Mapper;
 import com.ai.enigma.repository.ChatsRepo;
 import com.ai.enigma.repository.MessagesRepo;
+import com.ai.enigma.repository.UserInfoRepo;
 import com.ai.enigma.repository.UserStatsRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
@@ -19,6 +21,8 @@ import java.util.List;
 @Service
 public class RepoService {
     @Autowired
+    UserInfoRepo userInfoRepo;
+    @Autowired
     MessagesRepo messagesRepo;
     @Autowired
     UserStatsRepo userStatsRepo;
@@ -26,6 +30,15 @@ public class RepoService {
     ChatsRepo chatsRepo;
 
 
+    public UserInfoEntity getUserInfoByUserId(Long userId)
+    {
+        return userInfoRepo.getUserInfoEntityByUser_id(userId);
+    }
+    @Async
+    public void saveUserInfo(UserInfoEntity userInfo)
+    {
+        userInfoRepo.save(userInfo);
+    }
     @Async
     public void saveMsg(Message message, ContentType type)
     {
